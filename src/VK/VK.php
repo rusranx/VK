@@ -57,6 +57,7 @@ class VK
 
 	const AUTHORIZE_URL = 'https://oauth.vk.com/authorize';
 	const ACCESS_TOKEN_URL = 'https://oauth.vk.com/access_token';
+	const TOKEN_URL = 'https://oauth.vk.com/token';
 	const API_URL = 'https://api.vk.com/method';
 
 	/**
@@ -114,24 +115,50 @@ class VK
 	/**
 	 * Returns authorization link with passed parameters.
 	 *
-	 * @param   string $api_settings
-	 * @param   string $callback_url
-	 * @param   bool   $test_mode
+	 * @param   int|string $scope
+	 * @param   string     $callback_url
+	 * @param   string     $type
+	 * @param   bool       $test_mode
 	 * @return  string
 	 */
-	public function getAuthorizeUrl($api_settings = '', $callback_url = 'https://api.vk.com/blank.html', $test_mode = false)
+	public function getAuthorizeUrl($scope = '', $callback_url = 'https://api.vk.com/blank.html',
+	                                $type = 'token', $test_mode = false)
 	{
 		$parameters = [
 			'client_id'     => $this->app_id,
-			'scope'         => $api_settings,
+			'scope'         => $scope,
 			'redirect_uri'  => $callback_url,
-			'response_type' => 'code'
+			'response_type' => $type
 		];
 
 		if ($test_mode)
 			$parameters['test_mode'] = 1;
 
 		return $this->createUrl(self::AUTHORIZE_URL, $parameters);
+	}
+
+	/**
+	 * @param string     $login
+	 * @param string     $password
+	 * @param int|string $scope
+	 * @return string
+	 * @throws VKException
+	 */
+	public function getToken($login, $password, $scope = '')
+	{
+		throw new VKException('Standalone apps ONLY');
+		$parameters = [
+			'grant_type'    => 'password',
+			'client_id'     => $this->app_id,
+			'client_secret' => $this->api_secret,
+			'username'      => $login,
+			'password'      => $password,
+			'scope'         => $scope
+		];
+		$url = $this->createUrl(self::TOKEN_URL, $parameters);
+		$response = json_decode($this->request($url), true);
+
+		return $response['token'];
 	}
 
 	/**

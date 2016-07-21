@@ -78,8 +78,8 @@ class Scope
 				$permissionNames = explode(',', $permission);
 				$this->addPermission($permissionNames);
 			} else {
-				if (isset($this->$permission)) {
-					$this->_scope |= $this->$permission;
+				if (defined("static::".$permission)) {
+					$this->_scope |= constant("static::".$permission);
 				}
 			}
 		}

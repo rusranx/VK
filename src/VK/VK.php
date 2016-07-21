@@ -98,7 +98,7 @@ class VK
 	public function setAccessToken($access_token)
 	{
 		$this->access_token = $access_token;
-		
+
 		return $this->isAuth();
 	}
 
@@ -124,7 +124,7 @@ class VK
 	 * @return  string
 	 */
 	public function getAuthorizeUrl($scope = '', $callback_url = 'https://api.vk.com/blank.html',
-	                                $type = 'token', $test_mode = false)
+	                                $state = null, $type = 'token', $test_mode = false)
 	{
 		$parameters = [
 			'client_id'     => $this->app_id,
@@ -132,6 +132,9 @@ class VK
 			'redirect_uri'  => $callback_url,
 			'response_type' => $type
 		];
+		
+		if(!is_null($state))
+			$parameters['state'] = $state;
 
 		if ($test_mode)
 			$parameters['test_mode'] = 1;

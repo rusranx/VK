@@ -89,15 +89,17 @@ class VK
 	}
 
 	/**
-	 * Set Access Token.
+	 * Set Access Token and return auth status.
 	 *
 	 * @param   string $access_token
 	 * @throws  VKException
-	 * @return  void
+	 * @return  bool
 	 */
 	public function setAccessToken($access_token)
 	{
 		$this->access_token = $access_token;
+		
+		return $this->isAuth();
 	}
 
 	/**

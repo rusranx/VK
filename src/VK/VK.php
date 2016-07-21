@@ -203,7 +203,7 @@ class VK
 	 */
 	public function isAuth()
 	{
-		return !is_null($this->access_token);
+		return $this->checkAccessToken();
 	}
 
 	/**
